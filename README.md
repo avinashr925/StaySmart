@@ -12,6 +12,8 @@ StaySmart is a production-quality,  full-stack vacation rental platform enriched
 
 ![Property Details](<screenshots/Property details.png>)
 
+![price details](<screenshots/Ai price calculator.png>)
+
 ## AI Semantic Search
 
 ![AI Semantic Search](<screenshots/Ai search bar.png>)
@@ -19,6 +21,7 @@ StaySmart is a production-quality,  full-stack vacation rental platform enriched
 ##  Guest Dashboard
 
 ![Guest Dashboard](<screenshots/Profile : dashboard.png>)
+
 
 
 ---
