@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build files
+dist/
+.next/
+frontend/.next/
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+mongodb.log
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Coverage
+coverage/
