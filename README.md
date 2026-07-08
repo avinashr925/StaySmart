@@ -2,6 +2,25 @@
 
 StaySmart is a production-quality,  full-stack vacation rental platform enriched with modern AI features. This codebase is refactored from a basic Node/Express/EJS CRUD setup into a robust MVC REST API backend paired with a Next.js (App Router) React & TypeScript frontend. It is optimized for software engineering internship applications at top-tier companies.
 
+
+#  Project Screenshots
+
+##  Home Page
+![Home Page](<screenshots/Home page with Ai assistant.png>)
+
+##  Property Details
+
+![Property Details](<screenshots/Property details.png>)
+
+## AI Semantic Search
+
+![AI Semantic Search](<screenshots/Ai search bar.png>)
+
+##  Guest Dashboard
+
+![Guest Dashboard](<screenshots/Profile : dashboard.png>)
+
+
 ---
 
 ## 🌟 Key Features
