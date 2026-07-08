@@ -9,7 +9,7 @@ import Wishlist from "../models/wishlist";
 // Require the existing sample listings array to avoid duplicating code
 const initData = require("../../init/data.js");
 
-const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/staysmart";
 
 const amenitiesList = [
   "WiFi",

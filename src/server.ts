@@ -29,7 +29,7 @@ let io: Server | null = null;
 export const getSocketIO = () => io;
 
 const PORT = process.env.PORT || 8080;
-const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/staysmart";
 
 // 1) Global Middlewares
 app.use(
