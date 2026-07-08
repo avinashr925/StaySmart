@@ -1,6 +1,6 @@
 # StaySmart – AI-Enhanced Full-Stack Vacation Rental Platform
 
-StaySmart is a production-quality, Airbnb-like full-stack vacation rental platform enriched with modern AI features. This codebase is refactored from a basic Node/Express/EJS CRUD setup into a robust MVC REST API backend paired with a Next.js (App Router) React & TypeScript frontend. It is optimized for software engineering internship applications at top-tier companies.
+StaySmart is a production-quality,  full-stack vacation rental platform enriched with modern AI features. This codebase is refactored from a basic Node/Express/EJS CRUD setup into a robust MVC REST API backend paired with a Next.js (App Router) React & TypeScript frontend. It is optimized for software engineering internship applications at top-tier companies.
 
 ---
 
