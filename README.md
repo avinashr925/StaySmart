@@ -80,7 +80,7 @@ Create a `.env` file in the project root with the following definitions:
 
 ```env
 PORT=8080
-MONGO_URL=mongodb://127.0.0.1:27017/wanderlust
+MONGO_URL=mongodb://127.0.0.1:27017/staysmart
 FRONTEND_URL=http://localhost:3000
 NODE_ENV=development
 
