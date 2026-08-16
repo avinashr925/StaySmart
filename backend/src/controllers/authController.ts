@@ -740,7 +740,7 @@ export const uploadAvatar = catchAsync(async (req: Request, res: Response, next:
     return next(new AppError("Please upload an image file", 400));
   }
 
-  const urls = getUploadedUrls([req.file]);
+  const urls = getUploadedUrls([req.file], req);
   if (urls.length === 0) {
     return next(new AppError("File upload failed", 500));
   }

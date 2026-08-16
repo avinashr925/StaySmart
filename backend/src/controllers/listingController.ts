@@ -229,7 +229,7 @@ export const uploadListingImage = catchAsync(async (req: Request, res: Response,
   if (!req.file) {
     return next(new AppError("No file uploaded", 400));
   }
-  const urls = getUploadedUrls([req.file]);
+  const urls = getUploadedUrls([req.file], req);
   res.status(200).json({
     status: "success",
     data: {
@@ -251,7 +251,7 @@ export const createListing = catchAsync(async (req: Request, res: Response, next
     }
   }
 
-  const uploadedUrls = getUploadedUrls(req.files);
+  const uploadedUrls = getUploadedUrls(req.files, req);
   const uploadedFiles = (req.files || []) as any[];
 
   // Extract coordinate fields if present
@@ -385,7 +385,7 @@ export const updateListing = catchAsync(async (req: Request, res: Response, next
     return next(new AppError("You do not have permission to edit this listing", 403));
   }
 
-  const uploadedUrls = getUploadedUrls(req.files);
+  const uploadedUrls = getUploadedUrls(req.files, req);
   const uploadedFiles = (req.files || []) as any[];
   const updateData = { ...req.body };
 

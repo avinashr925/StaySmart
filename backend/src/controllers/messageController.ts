@@ -209,7 +209,7 @@ export const uploadAttachment = catchAsync(async (req: Request, res: Response, n
   if (!req.file) {
     return next(new AppError("No file uploaded", 400));
   }
-  const urls = getUploadedUrls([req.file]);
+  const urls = getUploadedUrls([req.file], req);
   res.status(200).json({
     status: "success",
     data: {

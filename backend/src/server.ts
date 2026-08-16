@@ -80,6 +80,20 @@ const generalLimiter = rateLimit({
   message: "Too many requests from this IP. Please try again after 15 minutes.",
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req: any) => {
+    const url = req.originalUrl || "";
+    return (
+      url.startsWith("/api/auth/signup") ||
+      url.startsWith("/api/auth/login") ||
+      url.startsWith("/api/auth/google") ||
+      url.startsWith("/api/auth/github") ||
+      url.startsWith("/api/auth/send-otp") ||
+      url.startsWith("/api/auth/verify-otp") ||
+      url.startsWith("/api/auth/forgot-password") ||
+      url.startsWith("/api/auth/reset-password") ||
+      url.startsWith("/api/ai")
+    );
+  },
   handler: (req: any, res: any, next: any, options: any) => {
     res.status(options.statusCode).json({
       status: options.statusCode,
@@ -134,7 +148,14 @@ const aiLimiter = rateLimit({
   },
 });
 
-app.use("/api/auth", authLimiter);
+app.use("/api/auth/signup", authLimiter);
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/google", authLimiter);
+app.use("/api/auth/github", authLimiter);
+app.use("/api/auth/send-otp", authLimiter);
+app.use("/api/auth/verify-otp", authLimiter);
+app.use("/api/auth/forgot-password", authLimiter);
+app.use("/api/auth/reset-password", authLimiter);
 app.use("/api/ai", aiLimiter);
 app.use("/api", generalLimiter);
 

@@ -66,7 +66,7 @@ export const createReview = catchAsync(async (req: Request, res: Response, next:
     );
   }
 
-  const uploadedUrls = getUploadedUrls(req.files);
+  const uploadedUrls = getUploadedUrls(req.files, req);
 
   // 3) Create review
   const newReview = await Review.create({
@@ -103,7 +103,7 @@ export const updateReview = catchAsync(async (req: Request, res: Response, next:
     return next(new AppError("You do not have permission to update this review", 403));
   }
 
-  const uploadedUrls = getUploadedUrls(req.files);
+  const uploadedUrls = getUploadedUrls(req.files, req);
 
   if (rating) review.rating = rating;
   if (comment) review.comment = comment;

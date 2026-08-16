@@ -317,7 +317,11 @@ userSchema.pre("validate", function (next) {
   }
 
   // Sync profile photo and avatar
-  if (this.profilePhoto && !this.avatar) {
+  if (this.isModified("avatar") && !this.isModified("profilePhoto")) {
+    this.profilePhoto = this.avatar;
+  } else if (this.isModified("profilePhoto") && !this.isModified("avatar")) {
+    this.avatar = this.profilePhoto;
+  } else if (this.profilePhoto && !this.avatar) {
     this.avatar = this.profilePhoto;
   } else if (this.avatar && !this.profilePhoto) {
     this.profilePhoto = this.avatar;

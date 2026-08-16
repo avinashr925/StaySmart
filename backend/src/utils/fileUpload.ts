@@ -1,7 +1,7 @@
 import path from "path";
 import { isCloudinaryConfigured } from "../config/cloudinary";
 
-export const getUploadedUrls = (reqFiles: any): string[] => {
+export const getUploadedUrls = (reqFiles: any, req?: any): string[] => {
   if (!reqFiles) return [];
   
   let files: Express.Multer.File[] = [];
@@ -20,8 +20,14 @@ export const getUploadedUrls = (reqFiles: any): string[] => {
     } else {
       // Local disk fallback: absolute host url path
       const filename = file.filename || path.basename(file.path);
-      const port = process.env.PORT || "8081";
-      const baseUrl = process.env.APP_URL || `http://localhost:${port}`;
+      let baseUrl = process.env.APP_URL;
+      if (!baseUrl && req) {
+        baseUrl = `${req.protocol}://${req.get("host")}`;
+      }
+      if (!baseUrl) {
+        const port = process.env.PORT || "8081";
+        baseUrl = `http://localhost:${port}`;
+      }
       return `${baseUrl}/uploads/${filename}`;
     }
   });
