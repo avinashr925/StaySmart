@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #09090b;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+@media print {
+  /* Hide the rest of the application */
+  nav,
+  header,
+  footer,
+  main,
+  aside,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset body and html layout to fit exactly one page */
+  html,
+  body {
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Make sure the modal wrappers and dialog overlays don't show black backdrops or bounds */
+  .fixed,
+  .absolute,
+  div {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  /* Target receipt and force it to be block and fill the page width */
+  #booking-receipt {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    padding: 24px !important;
+    border: 1px solid #e4e4e7 !important;
+    border-radius: 16px !important;
+    background: white !important;
+    color: black !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Hide any other children/siblings that are not the receipt */
+  #booking-receipt ~ *,
+  * ~ #booking-receipt {
+    display: none !important;
+  }
+}
