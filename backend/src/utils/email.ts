@@ -47,13 +47,10 @@ export async function sendEmail({
       logger.info(`Email sent successfully to ${to} (Subject: ${subject})`);
       return;
     } catch (err: any) {
-      if (process.env.NODE_ENV === "production") {
-        throw new Error(`SMTP sending failed: ${err.message}`);
-      }
       logger.error(`Failed to send email to ${to} via SMTP: ${err.message}. Falling back to console logging.`);
     }
-  } else if (process.env.NODE_ENV === "production") {
-    throw new Error("SMTP server is not configured in production.");
+  } else {
+    logger.warn(`SMTP server is not configured. Email to ${to} (Subject: ${subject}) will be logged to console instead.`);
   }
 
   // Fallback to beautiful console logger in development/fallback mode

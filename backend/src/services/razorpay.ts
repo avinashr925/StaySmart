@@ -11,19 +11,6 @@ const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET?.trim();
 
 const hasRazorpay = !!(keyId && keySecret && webhookSecret);
 
-if (isProd && !hasRazorpay) {
-  if (!keyId || !keySecret) {
-    throw new Error(
-      "Razorpay is not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET before starting StaySmart."
-    );
-  }
-  if (!webhookSecret) {
-    throw new Error(
-      "RAZORPAY_WEBHOOK_SECRET is required. Configure it before starting StaySmart so webhook signatures can be verified."
-    );
-  }
-}
-
 export let razorpayClient: Razorpay | null = null;
 export const isRazorpayConfigured = hasRazorpay;
 

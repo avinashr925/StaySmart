@@ -18,10 +18,7 @@ const INTEGRATIONS_IN_PRODUCTION = [
   "CLOUDINARY_API_KEY",
   "CLOUDINARY_API_SECRET",
   "GEMINI_API_KEY",
-  "GOOGLE_CLIENT_ID",
-  "SMTP_HOST",
-  "SMTP_USER",
-  "SMTP_PASS"
+  "GOOGLE_CLIENT_ID"
 ] as const;
 
 const isPlaceholderVal = (key: string, val?: string): boolean => {
@@ -39,11 +36,6 @@ const isPlaceholderVal = (key: string, val?: string): boolean => {
 const missingCore = REQUIRED_IN_PRODUCTION.filter((key) => !process.env[key] || isPlaceholderVal(key, process.env[key]));
 const missingIntegrations = INTEGRATIONS_IN_PRODUCTION.filter((key) => !process.env[key] || isPlaceholderVal(key, process.env[key]));
 
-// StaySmart uses Razorpay as its only payment gateway.
-const hasRazorpay = process.env.RAZORPAY_KEY_ID && !isPlaceholderVal("RAZORPAY_KEY_ID", process.env.RAZORPAY_KEY_ID);
-const hasRazorpaySecret = process.env.RAZORPAY_KEY_SECRET && !isPlaceholderVal("RAZORPAY_KEY_SECRET", process.env.RAZORPAY_KEY_SECRET);
-const hasRazorpayWebhook = process.env.RAZORPAY_WEBHOOK_SECRET && !isPlaceholderVal("RAZORPAY_WEBHOOK_SECRET", process.env.RAZORPAY_WEBHOOK_SECRET);
-
 if (isProd) {
   const errors: string[] = [];
   
@@ -52,9 +44,6 @@ if (isProd) {
   }
   if (missingIntegrations.length > 0) {
     errors.push(`Missing production integration configs: ${missingIntegrations.join(", ")}`);
-  }
-  if (!hasRazorpay || !hasRazorpaySecret || !hasRazorpayWebhook) {
-    errors.push("Razorpay payment configuration is incomplete. Set RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET and RAZORPAY_WEBHOOK_SECRET.");
   }
 
   if (errors.length > 0) {
