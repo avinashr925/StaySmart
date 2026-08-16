@@ -36,6 +36,7 @@ import { globalErrorHandler } from "./middlewares/errorHandler";
 import { AppError } from "./utils/AppError";
 
 const app = express();
+app.set("trust proxy", 1);
 const server = http.createServer(app);
 
 // Initialize Socket.IO
