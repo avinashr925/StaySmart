@@ -8,91 +8,156 @@
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-green?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Google Gemini](https://img.shields.io/badge/AI-Google%20Gemini-orange?logo=google-gemini&logoColor=white)](https://deepmind.google/technologies/gemini/)
 
-StaySmart is an AI-enhanced full-stack vacation rental platform designed to provide a streamlined, intelligent booking and listing experience. Built using an **Express + TypeScript MVC REST API** backend paired with a **Next.js 16 (App Router) React & TypeScript** frontend, the platform integrates large language models for query interpretation, geospatial mapping for property discoverability, WebSockets for real-time messaging, and multi-channel payment flows.
+StaySmart is an AI-enhanced full-stack vacation rental platform designed to provide a streamlined, intelligent booking and listing experience. Built around an **Express + TypeScript MVC REST API** backend and a **Next.js 16 (App Router) React & TypeScript** frontend, the platform integrates generative AI models for query parsing, geospatial mapping for discovery, WebSockets for real-time guest-host communications, and multi-channel payment options.
 
 ---
 
 ## 🚀 Live Demo & Codebase
-*   **Production URL**: [https://stay-smart-bice.vercel.app/](https://stay-smart-bice.vercel.app/)
-*   **GitHub Repository**: [https://github.com/avinashr925/StaySmart](https://github.com/avinashr925/StaySmart)
+*   **Production Deployment URL**: [https://stay-smart-bice.vercel.app/](https://stay-smart-bice.vercel.app/)
+*   **GitHub Repository URL**: [https://github.com/avinashr925/StaySmart](https://github.com/avinashr925/StaySmart)
 
 ---
 
 ## 📸 Product Showcase
 
-### 1. Home / Landing Page
-The landing portal features a clean search entry (address destination, calendar dates, guest capacity counts), quick-access category browse filters (Cabins, Mansions, Beachfront, Apartments), and a grid displaying active vacation stays.
+### 1. 🏠 Home & Discovery Experience
+The home landing interface aggregates the main stay search panel (supporting city parameters, booking date ranges, and guest size counts), quick category filters (Beachfront, Mansions, Cabins, Apartments), and a responsive layout displaying featured vacation properties.
 
-| Hero & Search Portal | Category Listing Browser |
+| Search Hero Portal Page | Category Browse selector | Stays Browse Grid |
+| :---: | :---: | :---: |
+| ![Landing Hero](Screenshots/Homepage_1.png) | ![Categories Selector](Screenshots/Homepage_2.png) | ![Featured Grid Listings](Screenshots/homepage_3.png) |
+
+---
+
+### 2. 🔎 Explore, Listings & Map Discovery
+The explore panel supports multi-parameter filtering, allowing guests to search by price range, guest count, bedroom count, and specific amenity tags. Listing results are plotted as custom markers on an interactive geolocated map.
+
+| Property Grid View | Interactive Geospatial Map Discovery |
 | :---: | :---: |
-| ![Search Hero Landing](Screenshots/Homepage_1.png) | ![Featured Grid Listings](Screenshots/homepage_3.png) |
+| ![Filter Listings Grid](Screenshots/Listings.png) | ![Geographical Leaflet Map](Screenshots/map.png) |
 
 ---
 
-### 2. Explore & Listings
-The Explore page groups stays in a grid layout with smooth hover transition animations. Guests can filter listings using precise parameters: price bounds, guest sizing, bedroom counts, and specific amenity tags.
+### 3. 🏡 Property Details Page
+The Property Details page presents images, nightly rates, check-in rules, host information, dynamic weather projections, and nearby points of interest. 
+*(No separate screenshot is provided for this section; the details page integrates parameters verified in the Listings and Map views).*
 
-| Listings Overview Grid | Interactive Leaflet Map Discovery |
+---
+
+### 4. ➕ Host Listing Creation Workflow
+Hosts publish rental spaces through a multi-step workflow that collects property specifics, location parameters, and house rules.
+
+| Step 1: Listing Details | Step 2: Location Map Picker | Step 3: Amenity Setup |
+| :---: | :---: | :---: |
+| ![addlisting_1](Screenshots/addlisting_1.png) | ![addlisting_2_location map](Screenshots/addlisting_2_location%20map.png) | ![addlisting_3](Screenshots/addlisting_3.png) |
+
+| Step 4: Images Gallery | Step 5: House Rules |
 | :---: | :---: |
-| ![Property Results Grid](Screenshots/Listings.png) | ![Interactive Geolocation Map](Screenshots/map.png) |
+| ![addlisting_4](Screenshots/addlisting_4.png) | ![hosing rules](Screenshots/hosing%20rules.png) |
 
 ---
 
-### 3. AI Travel Assistant
-A floating virtual chat guide powered by Google Gemini. The assistant dynamically retrieves matching property choices from MongoDB based on guest chat parameters, drafts customized multi-day travel itineraries, and calculates budget estimates.
+### 5. 📅 Availability & Calendar Management
+Hosts manage stay availability by toggling blackout ranges and booking intervals on a calendar interface.
 
 <div align="center">
-  <img src="Screenshots/Ai chat assistant.png" alt="AI Conversational Travel Assistant" width="60%" />
+  <img src="Screenshots/calendarfor%20host%20to%20block%20dates.png" alt="Blackout Calendar Date Picker" width="60%" />
 </div>
 
 ---
 
-### 4. AI Dynamic Pricing
-Host control views feature an AI Dynamic Pricing and Revenue Forecasting analyzer. By comparing competitor listings in the same city, evaluating listing metrics, and querying Gemini models, hosts receive nightly price suggestions, profitable floors/ceilings, expected occupancy models, and 12-month revenue estimations.
+### 6. 🏠 Host Management Dashboard
+The Host Dashboard provides tools for listing controls, unread message alerts, reservation logs, and dynamic price evaluations. The interface supports native light and dark modes.
+
+| Light Mode Dashboard | Dark Mode Dashboard |
+| :---: | :---: |
+| ![Host Dashboard Light](Screenshots/Host%20dashboard_light%20mode.png) | ![Host Dashboard Dark](Screenshots/Host%20dash%20board_darkmode.png) |
 
 <div align="center">
-  <img src="Screenshots/AI Dynamic pricing.png" alt="AI Dynamic Pricing Dashboard" width="80%" />
+  <img src="Screenshots/Host%20dashboard%20_1.png" alt="Host Analytics Panel" width="85%" />
+</div>
+
+#### Listing Inventory Management (Host Subsection)
+The inventory list allows hosts to quickly edit listing fields, delete active stays, and chat directly with guests.
+
+<div align="center">
+  <img src="Screenshots/listing%20_message_edit_delete_all.png" alt="Listing Manager Table" width="85%" />
 </div>
 
 ---
 
-### 5. Host & operations Dashboard
-Hosts manage properties from a central dashboard containing listing status overrides, incoming booking reservation logs, active dynamic price recommendations, and host-issued coupons.
+### 7. 💰 AI Dynamic Pricing & Revenue Intelligence
+The Host Dashboard incorporates an AI pricing analyzer that evaluates local competitor stays, user reviews, and seasonality adjustments to recommend nightly rates, occupancy rates, and annual revenue forecasts.
 
 <div align="center">
-  <img src="Screenshots/Host dashboard _1.png" alt="Host Operation Control Center" width="80%" />
+  <img src="Screenshots/AI%20Dynamic%20pricing.png" alt="AI Dynamic Pricing" width="85%" />
 </div>
 
 ---
 
-### 6. Booking & Payments Checkout
-StaySmart implements a polymorphic payment architecture supporting Razorpay card/wallet gateways, a manual UPI verification form, and local Mock payment adapters.
-
-| Card/Netbanking Checkout | Manual UPI Checkout Form | Transaction Bill Receipt | Booking Success Dialog |
-| :---: | :---: | :---: | :---: |
-| ![Razorpay checkout Form](Screenshots/Payment.png) | ![UPI Manual payment Form](Screenshots/payment_upi.png) | ![PDF Bill Slip Invoice](Screenshots/Payment slip.png) | ![Confirmation Screen Dialog](Screenshots/payment_conformation.png) |
-
----
-
-### 7. Real-Time Chat Inbox
-Using Socket.IO, StaySmart integrates direct client-to-client messaging between listings hosts and guests, complete with real-time text delivery, typing indicators, and unread notification increments.
-
-| Theme UI | Light Mode Messaging | Dark Mode Messaging |
-| :--- | :---: | :---: |
-| **Chat Interface** | ![Inbox Light Theme](Screenshots/chatinbox_lightmode.png) | ![Inbox Dark Theme](Screenshots/chat inbox_darkmode.png) |
-
----
-
-### 8. Authentication & Themes
-StaySmart features native Light/Dark theme configuration states and secure OAuth logins via Google and GitHub.
-
-| Theme UI | Light Theme | Dark Theme |
-| :--- | :---: | :---: |
-| **Auth Access Portal** | ![Signup Light mode](Screenshots/Signup page_light mode.png) | ![Signup Dark mode](Screenshots/Signup page_dark mode.png) |
-| **Host Console** | ![Host Dashboard Light](Screenshots/Host dashboard_light mode.png) | ![Host Dashboard Dark](Screenshots/Host dash board_darkmode.png) |
+### 8. 🤖 AI Travel Assistant
+A floating chat interface powered by Google Gemini. The assistant dynamically queries MongoDB to suggest properties matching guest criteria (RAG pattern) and builds custom travel itineraries.
 
 <div align="center">
-  <img src="Screenshots/Login page.png" alt="OAuth Portal" width="50%" />
+  <img src="Screenshots/Ai%20chat%20assistant.png" alt="AI Assistant Conversation" width="60%" />
+</div>
+
+---
+
+### 9. 💬 Real-Time Guest & Host Messaging
+A real-time messaging pipeline powered by Socket.IO allows hosts and guests to chat, manage check-in details, and exchange attachment files.
+
+| Light Theme Messaging | Dark Theme Messaging |
+| :---: | :---: |
+| ![Chat Light](Screenshots/chatinbox_lightmode.png) | ![Chat Dark](Screenshots/chat%20inbox_darkmode.png) |
+
+---
+
+### 10. 🔐 Authentication & Account Access
+StaySmart supports credentials-based login and signup alongside Google and GitHub OAuth portals.
+
+| Light Mode Registration | Dark Mode Registration |
+| :---: | :---: |
+| ![Signup Light](Screenshots/Signup%20page_light%20mode.png) | ![Signup Dark](Screenshots/Signup%20page_dark%20mode.png) |
+
+<div align="center">
+  <img src="Screenshots/Login%20page.png" alt="Credentials Login Page" width="50%" />
+</div>
+
+---
+
+### 11. 💳 Booking & Payments Checkout
+The checkout wizard displays stay breakdowns, applied coupon codes, and processing fees. It handles credit card and wallet payments via Razorpay.
+
+<div align="center">
+  <img src="Screenshots/Payment.png" alt="Card Payment Portal Form" width="55%" />
+</div>
+
+---
+
+### 12. 💸 UPI Payment Workflow
+For offline options, guests can transfer booking costs manually by submitting transaction reference details for host verification.
+
+<div align="center">
+  <img src="Screenshots/payment_upi.png" alt="UPI Manual Checkout Form" width="55%" />
+</div>
+
+---
+
+### 13. 🧾 Booking Receipt & Invoice
+Upon successful checkout, StaySmart compiles booking details into a PDF receipt layout for direct download.
+
+<div align="center">
+  <img src="Screenshots/Payment%20slip.png" alt="PDF Billing Invoice Receipt" width="55%" />
+</div>
+
+---
+
+### 14. ✅ Booking Confirmation
+Successful bookings trigger a confirmation summary modal.
+
+<div align="center">
+  <img src="Screenshots/payment_conformation.png" alt="Successful Booking Confirmation Screen" width="55%" />
 </div>
 
 ---
@@ -101,77 +166,77 @@ StaySmart features native Light/Dark theme configuration states and secure OAuth
 
 | Feature Module | Technical Status | Implementation Details / Dependencies |
 | :--- | :---: | :--- |
-| **Vacation Rental Discovery** | ✅ Implemented | Grid display, category sorting, search filtering, and calendar details |
-| **Property Details Page** | ✅ Implemented | Title, description, interactive calendar picker, Leaflet maps, amenities |
-| **Interactive Maps** | ✅ Implemented | Leaflet.js mapping library loading geocoded marker positions |
-| **Geocoding** | ✅ Implemented | Nominatim OpenStreetMap API mapping address fields to lat/lng coordinates |
-| **Reverse Geocoding** | 🔜 Planned | Auto-resolving addresses from direct map pin adjustments |
-| **AI Semantic Search** | ⚙️ Configuration-dependent | Gemini-1.5-flash parses query strings to params; falls back to regex keywords |
-| **AI Travel Assistant** | ⚙️ Configuration-dependent | Chatbot with DB property injection; falls back to offline itineraries if no API key |
-| **AI Dynamic Pricing** | ⚙️ Configuration-dependent | Seasonality checks + competitor ranges + Gemini-based valuation recommendations |
-| **Revenue Forecasting** | ⚙️ Configuration-dependent | 12-month occupancy projections using database parameters and LLM analysis |
-| **Guest Dashboard** | ✅ Implemented | Listing reservation records, cancellation requests, profile editing, and wishlists |
-| **Host Dashboard** | ✅ Implemented | Performance metrics, CRUD listings, checkouts logs, and custom coupon settings |
+| **Vacation Rental Discovery** | ✅ Implemented | Grid display, category filters, destination search, and date availability |
+| **Property Details Page** | ✅ Implemented | Details display, Leaflet maps, host details, and booking form |
+| **Interactive Maps** | ✅ Implemented | Leaflet.js rendering geocoded property markers |
+| **Geocoding** | ✅ Implemented | Address translation via Nominatim OpenStreetMap API |
+| **Reverse Geocoding** | 🔜 Planned | Dynamic address lookup from map pin placement |
+| **AI Semantic Search** | ⚙️ Configuration-dependent | Gemini-1.5-flash parses query strings; falls back to regex keywords |
+| **AI Travel Assistant** | ⚙️ Configuration-dependent | Concierge chat with MongoDB RAG stay recommendations; falls back to template replies |
+| **AI Dynamic Pricing** | ⚙️ Configuration-dependent | Competitor listing valuations + rating weights + Gemini dynamic prompt suggestions |
+| **Revenue Forecasting** | ⚙️ Configuration-dependent | 12-month projections based on listing history and LLM insights |
+| **Guest Dashboard** | ✅ Implemented | Bookings manager, cancellation request overrides, profile edits, wishlists |
+| **Host Dashboard** | ✅ Implemented | Overview stats (payouts, listings count), calendar dates blocker, listing CRUD, custom coupons |
 | **Listing Management** | ✅ Implemented | Complete CRUD operations for host properties |
-| **Wishlist / Favorites** | ✅ Implemented | Save listings locally to wishlist database logs |
-| **Reviews & Ratings** | ✅ Implemented | Guest reviews with rating scores (1-5), comments, and up to 3 image uploads |
-| **Real-time Chat** | ✅ Implemented | Socket.IO WS channels transmitting messages, attachments, and typing states |
-| **Light/Dark Mode** | ✅ Implemented | Next-Themes synchronization across all application views |
-| **Booking Engine** | ✅ Implemented | Date-collision checks and calendar availability checking |
+| **Wishlist / Favorites** | ✅ Implemented | Toggle and save listings to database collection |
+| **Reviews & Ratings** | ✅ Implemented | Guest reviews with ratings (1-5), comments, and up to 3 attachments; once-per-user constraint |
+| **Real-time Chat** | ✅ Implemented | Socket.IO WebSockets for instant message streams and typing status indicators |
+| **Light/Dark Mode** | ✅ Implemented | Next-Themes class adjustments synchronized across application components |
+| **Booking Engine** | ✅ Implemented | Calendar date overlap prevention and double-booking checks |
 | **Razorpay Payments** | ⚙️ Configuration-dependent | Razorpay Checkout SDK + webhook verification for order confirmation |
-| **UPI Manual Flow** | ✅ Implemented | Manual input fields for UPI transactions + admin verification matching |
-| **PDF Invoice** | ✅ Implemented | Server-side PDFKit compilation rendering structured checkout receipts |
-| **Authentication** | ✅ Implemented | Credentials password hashing (bcryptjs) + JWT token rotations |
-| **OAuth Integration** | ⚙️ Configuration-dependent | Google & GitHub OAuth client validation |
-| **Image Upload System** | ⚙️ Configuration-dependent | Cloudinary CDN uploads; falls back to local disk storage in development |
-| **Admin Controls** | ✅ Implemented | System metrics, user suspension, host registration approvals, feature flags |
-| **Responsive UI** | ✅ Implemented | CSS Tailwind grids, flex containers, and mobile side-drawers |
+| **UPI Manual Flow** | ✅ Implemented | Reference key entries matched against reservation listings |
+| **PDF Invoice** | ✅ Implemented | Server-side PDFKit receipt compilation |
+| **Authentication** | ✅ Implemented | Bcryptjs password hashing + JWT Access and Refresh token rotation |
+| **OAuth Integration** | ⚙️ Configuration-dependent | Google and GitHub client authentication |
+| **Image Upload System** | ⚙️ Configuration-dependent | Cloudinary integration; falls back to local disk storage in development |
+| **Admin Controls** | ✅ Implemented | Analytics overview, user suspensions, host registration approvals, feature flags |
+| **Responsive UI** | ✅ Implemented | Responsive CSS Tailwind grids, flexible flexboxes, and mobile drawer interfaces |
 
 ---
 
 ## 🤖 AI & Intelligent Features
 
-StaySmart incorporates generative artificial intelligence via the `@google/generative-ai` SDK, powered by the `gemini-1.5-flash` model. These features fail gracefully to deterministic local rule engines if the Gemini API key is missing.
+StaySmart integrates generative artificial intelligence using the `@google/generative-ai` SDK, powered by the `gemini-1.5-flash` model. These features fail gracefully to local rule engines if the Gemini API key is missing.
 
 ### 1. AI Semantic Search
-*   **User Value**: Lets guests find matching stays using open conversational search phrases rather than manual menu filters (e.g., *"quiet cabin in Goa under ₹5000 with a swimming pool"*).
-*   **Technical Mechanism**: Transmits the conversational string to Gemini. The model returns a structured JSON output mapping parsed fields (city, priceMax, propertyType, bedrooms, guests, key search tags, and an explanation parameter `aiRationale`). The backend maps this JSON directly to a MongoDB query.
-*   **Fallback Mechanism**: Parses input strings locally using regular expressions for keywords (e.g., "beach", "pool", "ac", "wifi"), numeric bounds for pricing, and matches predefined city tags.
+*   **User Value**: Allows guests to find properties using natural-language search phrases (e.g., *"quiet cabin in Goa under ₹5000 with a swimming pool"*).
+*   **Technical Mechanism**: Sends the query string to Gemini. The model returns a structured JSON mapping parsed query constraints (city, priceMax, propertyType, bedrooms, guests, key search tags, and `aiRationale`). The backend maps this JSON schema directly to a MongoDB query.
+*   **Fallback Mechanism**: Parses queries locally using regular expressions for keywords (e.g., "beach", "pool", "ac", "wifi"), numerical bounds for pricing, and matches predefined city tags.
 
 ### 2. AI Travel Assistant Chatbot
-*   **User Value**: Provides a floating assistant dialog advising users on sightseeing, restaurants, and stay matching.
-*   **Technical Mechanism**: Implemented in `AiAssistant.tsx`. Prior to sending the query to Gemini, the backend uses query parameters to fetch up to 8 matching listings from MongoDB (RAG pattern). These properties are injected into the LLM system instructions, prompting the model to recommend real database stays.
-*   **Fallback Mechanism**: Returns local concierge replies detailing transport options and basic travel parameters.
+*   **User Value**: Offers a conversational virtual assistant to suggest stays and sightseeing activities.
+*   **Technical Mechanism**: Implemented in `AiAssistant.tsx`. Prior to sending the query to Gemini, the backend uses parsed query parameters to retrieve up to 8 matching stays from MongoDB (RAG pattern) and injects them into the system prompt.
+*   **Fallback Mechanism**: Returns template responses detailing public transport tips and basic travel guidelines.
 
 ### 3. AI Dynamic Pricing & Price Prediction
-*   **User Value**: Recommends optimized pricing brackets to listing owners to maximize rental yields.
-*   **Technical Mechanism**: Traced in `pricing.ts`. It queries similar listings within the same city. The competitor average, listing ratings, and amenity counts are evaluated by Gemini to predict suggested pricing, occupancy limits, and confidence ratings.
-*   **Fallback Mechanism**: Employs mathematical averages of competitor listings in the same city, applying discounts or premiums based on rating thresholds and amenity ratios.
+*   **User Value**: Provides hosts with dynamic pricing suggestions to optimize nightly rates.
+*   **Technical Mechanism**: Traced in `pricing.ts`. It queries similar listings within the same city. The competitor average, listing ratings, and amenity counts are evaluated by Gemini to suggest target prices and occupancy estimates.
+*   **Fallback Mechanism**: Calculates average prices of competitor listings in the same city, applying adjustments based on rating thresholds and amenity ratios.
 
 ### 4. Revenue Forecasting & Analytics
-*   **User Value**: Offers hosts projected revenue statistics to plan property expenses.
-*   **Technical Mechanism**: Traced in `forecasting.ts`. It combines base daily prices with seasonal occupancy rates to generate a 12-month revenue curve, highlighting low-demand periods and proposing adjustments (e.g., off-season coupons).
-*   **Fallback Mechanism**: Evaluates baseline occupancy averages (65-75% depending on rating) and applies a hardcoded seasonal multiplier array to build chart data.
+*   **User Value**: Displays projected occupancy and earnings curves.
+*   **Technical Mechanism**: Traced in `forecasting.ts`. It combines base daily prices with seasonal occupancy rates to generate a 12-month revenue forecast.
+*   **Fallback Mechanism**: Evaluates baseline occupancy averages (65-75% depending on rating) and applies a seasonal multiplier array to build chart data.
 
 ---
 
 ## 🗺️ Maps, Geolocation & Travel Context
 
-Geolocation and mapping features are integrated into search, explore, and details pages.
+StaySmart uses geospatial services to add location context to listing search, explore, and details pages.
 
 1.  **Map Display**: Powered by Leaflet.js inside `PropertyMap.tsx`. It processes GeoJSON Point coordinates `[longitude, latitude]` stored in listings, displaying custom marker pins for all properties matching active searches.
 2.  **Geocoding Address Translator**: When a host publishes a listing, the controller calls the Nominatim OpenStreetMap API:
     `https://nominatim.openstreetmap.org/search?format=json&q={address}`
-    IfNominatim resolves coordinates, they are saved as a GeoJSON point. If it fails, the host is prompted to enter coordinates manually.
-3.  **Dynamic Attraction Contexts**: Traced in `geodataService.ts`. Prior to displaying listing details, the backend queries the OpenStreetMap Overpass API for tourism markers, viewpoint nodes, museums, theme parks, restaurants, and cafes within a 1.5km to 3km radius. Results are returned to the details page as "Nearby Attractions".
+    If Nominatim resolves coordinates, they are saved as a GeoJSON point. If it fails, the host is prompted to enter coordinates manually.
+3.  **Dynamic Attraction Contexts**: Traced in `geodataService.ts`. Prior to displaying listing details, the backend queries the OpenStreetMap Overpass API for tourism markers, viewpoints, museums, restaurants, and cafes within a 1.5km to 3km radius. Results are returned as "Nearby Attractions".
 4.  **Weather Forecasts**: The details page fetches current weather parameters for the property's latitude and longitude from the Open-Meteo API.
-5.  **Caching Strategy**: OSM geodata queries and weather responses are cached in a `GeodataCache` MongoDB collection. Weather caches expire in 4 hours, while attraction caches persist for 7 days, preventing third-party rate limits.
+5.  **Caching Strategy**: OSM geodata queries and weather responses are cached in a `GeodataCache` MongoDB collection. Weather caches expire in 4 hours, while attraction caches persist for 7 days.
 
 ---
 
 ## 🏠 Host Experience
 
-*   **Host Onboarding**: Hosts complete onboarding before publishing listings. The profile requires banking details (account holder name, encrypted account number, bank name, IFSC, UPI ID) and GST details (GSTIN, legal name).
+*   **Host Onboarding**: Hosts complete onboarding before publishing listings. The profile requires bank details (account holder name, encrypted account number, bank name, IFSC, UPI ID) and GST details (GSTIN, legal name).
 *   **Listing CRUD**: Hosts publish properties through forms collecting details: title, description, nightly price, street address, category type, capacity limits, rules, and image attachments.
 *   **Host Operations Dashboard**: Exposes summary counts (total listings, reservations count, monthly revenue), active property performance status toggles, and dynamic pricing metrics.
 *   **Coupon Management**: Hosts issue custom discount codes, tracking usage, active states, and expiry dates.
@@ -326,6 +391,7 @@ StaySmart defines Mongoose schemas with clear relationships:
 *   `PATCH /profile` - Update profile bio, phone, languages, or default house rules.
 *   `POST /forgot-password` - Dispatches password recovery tokens to specified emails.
 *   `POST /reset-password` - Resets passwords using verified reset tokens.
+*   `POST /update-password` - Update password while logged in.
 *   `POST /send-otp` - Triggers registration or verification emails with verification codes.
 *   `POST /verify-otp` - Validates verification codes.
 *   `GET /sessions` - Lists active browser login histories.
