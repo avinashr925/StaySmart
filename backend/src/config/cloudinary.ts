@@ -63,12 +63,24 @@ class FallbackStorage implements multer.StorageEngine {
 
       this.cloudinaryStorage._handleFile(req, fileForCloudinary, (err: any, info: any) => {
         if (err) {
-          // Log safe, non-sensitive diagnostic details to the console/Render logs using properties already available on err
-          logger.error("[Cloudinary Diagnostics Log] Upload failed", {
-            errMessage: err.message,
-            errHttpCode: err.http_code,
-            errName: err.name,
-          });
+          const safeDiagnostics: any = {
+            message: err.message,
+            http_code: err.http_code,
+            name: err.name,
+          };
+          if (err.error) {
+            safeDiagnostics.innerError = {
+              message: err.error.message,
+              http_code: err.error.http_code,
+            };
+          }
+          if (err.description) {
+            safeDiagnostics.description = err.description;
+          }
+
+          logger.error("[Cloudinary Diagnostics Log] Detailed upload error:", safeDiagnostics);
+          // eslint-disable-next-line no-console
+          console.error("[Cloudinary Diagnostics Log] Detailed upload error:", JSON.stringify(safeDiagnostics, null, 2));
 
           // eslint-disable-next-line no-console
           console.warn("[WARN] Cloudinary upload failed. Falling back to local disk storage:", err.message || err);
@@ -106,6 +118,15 @@ if (hasCloudinary) {
     api_secret: apiSecret,
     secure: true,
   });
+
+  const configCheck = cloudinary.config();
+  const isCloudinaryConfiguredSuccessfully = !!(
+    configCheck.cloud_name &&
+    configCheck.api_key &&
+    configCheck.api_secret
+  );
+  // eslint-disable-next-line no-console
+  console.log(`[Cloudinary Diagnostics Log] configured: ${isCloudinaryConfiguredSuccessfully ? "yes" : "no"}`);
 
   const cloudinaryStorage = new CloudinaryStorage({
     cloudinary,
