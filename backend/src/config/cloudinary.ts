@@ -4,8 +4,83 @@ import { Readable } from "stream";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import https from "https";
 import { logger } from "../utils/logger";
 import { AppError } from "../utils/AppError";
+
+const originalRequest = https.request;
+
+(https as any).request = function (...args: any[]) {
+  let callbackIndex = -1;
+  let options: any = null;
+
+  for (let i = args.length - 1; i >= 0; i--) {
+    if (typeof args[i] === "function") {
+      callbackIndex = i;
+      break;
+    }
+  }
+
+  if (callbackIndex > 0) {
+    options = args[callbackIndex - 1];
+  } else if (args.length > 0 && typeof args[0] !== "function") {
+    options = args[0];
+  }
+
+  let isCloudinaryRequest = false;
+  if (options) {
+    if (typeof options === "string") {
+      isCloudinaryRequest = options.includes("api.cloudinary.com");
+    } else if (typeof options === "object") {
+      isCloudinaryRequest = !!(
+        options.host === "api.cloudinary.com" ||
+        options.hostname === "api.cloudinary.com" ||
+        (options.href && options.href.includes("api.cloudinary.com"))
+      );
+    }
+  }
+
+  if (isCloudinaryRequest && callbackIndex !== -1) {
+    const originalCallback = args[callbackIndex];
+    args[callbackIndex] = function (res: any) {
+      if (res && res.statusCode === 403) {
+        let body = "";
+        res.on("data", (chunk: any) => {
+          body += chunk;
+        });
+        res.on("end", () => {
+          let safeMsg = "N/A";
+          try {
+            const parsed = JSON.parse(body);
+            if (parsed && parsed.error && parsed.error.message) {
+              safeMsg = parsed.error.message;
+            }
+          } catch (e) {
+            // Body is not JSON
+          }
+
+          // eslint-disable-next-line no-console
+          console.error(
+            `[Cloudinary Diagnostics]\n` +
+            `HTTP status: 403\n` +
+            `Cloudinary error message: ${safeMsg !== "N/A" ? safeMsg : (res.headers["x-cld-error"] || "N/A")}\n` +
+            `X-Cld-Error: ${res.headers["x-cld-error"] || "N/A"}\n` +
+            `Cloud name present: ${!!cloudName ? "yes" : "no"}\n` +
+            `API key present: ${!!apiKey ? "yes" : "no"}\n` +
+            `API secret present: ${!!apiSecret ? "yes" : "no"}`
+          );
+        });
+      } else if (res && res.headers["x-cld-error"]) {
+        // eslint-disable-next-line no-console
+        console.error(`[Cloudinary Diagnostics] X-Cld-Error: ${res.headers["x-cld-error"]}`);
+      }
+
+      return originalCallback(res);
+    };
+  }
+
+  return originalRequest.apply(https, args as any);
+};
 
 const isProd = process.env.NODE_ENV === "production";
 
