@@ -16,7 +16,7 @@ export const getUploadedUrls = (reqFiles: any, req?: any): string[] => {
 
   return files.map((file: any) => {
     if (file.path && (file.path.startsWith("http://") || file.path.startsWith("https://"))) {
-      return file.path; // Cloudinary URL
+      return file.path.replace(/^http:\/\//i, "https://"); // Force https on Cloudinary URLs
     } else {
       // Local disk fallback: absolute host url path
       const filename = file.filename || path.basename(file.path);

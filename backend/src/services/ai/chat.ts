@@ -118,7 +118,6 @@ export const getHostChatResponse = async (
   const genAI = getGenAI();
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
       const systemInstruction = `
         You are "StaySmart Host Intelligence Bot", an expert real estate consultant and vacation rental advisor.
         Your goal is to answer hosts' queries regarding listing optimization, dynamic pricing, maximizing occupancy, guest communication, managing cancellations, and local market trends.
@@ -130,11 +129,16 @@ export const getHostChatResponse = async (
         Use this listing data to provide tailored advice for their properties where applicable.
       `;
 
+      const model = genAI.getGenerativeModel({
+        model: GEMINI_MODEL,
+        systemInstruction: systemInstruction.trim(),
+      });
+
       const chat = model.startChat({
         history: sanitizeChatHistory(history),
       });
 
-      const result = await chat.sendMessage(`${systemInstruction}\n\nHost Query: ${message}`);
+      const result = await chat.sendMessage(message);
       return { response: result.response.text(), isFallback: false };
     } catch (err) {
       const response = handleGeminiError(err);
@@ -163,7 +167,6 @@ export const getGuestChatResponse = async (
   const genAI = getGenAI();
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
       const systemInstruction = `
         You are "StaySmart Travel Guide AI", a friendly, premium concierge and tour assistant.
         Your goal is to help guests find homes on StaySmart, draft complete holiday travel itineraries (restaurants, transport, sightseeing), and optimize travel budgets.
@@ -174,11 +177,16 @@ export const getGuestChatResponse = async (
         ALWAYS base your recommendations on these real database properties. Suggest specific matches by name and detail their amenities and prices. Do NOT invent properties that are not listed above. Provide friendly, comprehensive, markdown-formatted responses.
       `;
 
-      const chat = model.startChat({
-  history: sanitizeChatHistory(history),
-});
+      const model = genAI.getGenerativeModel({
+        model: GEMINI_MODEL,
+        systemInstruction: systemInstruction.trim(),
+      });
 
-      const result = await chat.sendMessage(`${systemInstruction}\n\nGuest Query: ${message}`);
+      const chat = model.startChat({
+        history: sanitizeChatHistory(history),
+      });
+
+      const result = await chat.sendMessage(message);
       return { response: result.response.text(), isFallback: false };
     } catch (err) {
       const response = handleGeminiError(err);

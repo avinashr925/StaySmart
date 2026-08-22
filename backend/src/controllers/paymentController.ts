@@ -101,6 +101,7 @@ const confirmBookingFromCapturedPayment = async (
   }
 
   booking.status = "Confirmed";
+  booking.paymentMethod = "razorpay";
   await booking.save();
 
   // Calculate fee splits
@@ -227,6 +228,9 @@ export const checkoutSession = catchAsync(
 
     const listing = await Listing.findById(listingId);
     if (!listing) return next(new AppError("Listing not found", 404));
+    if (listing.owner.toString() === userId.toString()) {
+      return next(new AppError("You cannot book your own listing.", 403));
+    }
     if (listing.maintenanceMode) {
       return next(new AppError("This listing is currently unavailable for booking.", 400));
     }
@@ -678,6 +682,9 @@ export const upiCheckout = catchAsync(
 
     const listing = await Listing.findById(listingId);
     if (!listing) return next(new AppError("Listing not found", 404));
+    if (listing.owner.toString() === userId.toString()) {
+      return next(new AppError("You cannot book your own listing.", 403));
+    }
     if (listing.maintenanceMode) {
       return next(new AppError("This listing is currently unavailable for booking.", 400));
     }

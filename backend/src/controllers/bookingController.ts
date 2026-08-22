@@ -240,6 +240,9 @@ export const joinWaitlist = catchAsync(async (req: Request, res: Response, next:
   if (!listing) {
     return next(new AppError("Listing not found", 404));
   }
+  if (listing.owner.toString() === userId.toString()) {
+    return next(new AppError("You cannot book your own listing.", 403));
+  }
 
   const waitlist = await Waitlist.create({
     listing: listingId,

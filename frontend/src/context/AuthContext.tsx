@@ -110,6 +110,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Initialize: Check if access token exists in session
   useEffect(() => {
+    const handleLogoutEvent = () => {
+      localStorage.removeItem("accessToken");
+      setToken(null);
+      setUser(null);
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("auth-logout", handleLogoutEvent);
+    }
+
     const fetchMe = async () => {
       setConnectionError(null);
       try {
@@ -193,6 +203,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     fetchMe();
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("auth-logout", handleLogoutEvent);
+      }
+    };
   }, []);
 
   const login = async (email: string, password: string, rememberMe?: boolean) => {

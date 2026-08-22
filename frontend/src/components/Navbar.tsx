@@ -35,15 +35,16 @@ export default function Navbar() {
     router.push(mode === "signup" ? "/signup" : "/login");
   };
 
-  const toggleRole = () => {
+  const toggleRole = async () => {
     if (!user) return;
     if (user.role === "Guest" && !user.isOnboarded) {
       router.push("/become-host");
       return;
     }
     const nextRole = user.role === "Host" ? "Guest" : "Host";
-    updateUserRole(nextRole);
+    await updateUserRole(nextRole);
     router.push(nextRole === "Host" ? "/dashboard/host" : "/dashboard/guest");
+    router.refresh();
   };
 
   return (

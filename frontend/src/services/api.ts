@@ -15,6 +15,89 @@ const getHeaders = (isMultipart = false) => {
   return headers;
 };
 
+const originalFetch = typeof window !== "undefined" ? window.fetch : globalThis.fetch;
+
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+const subscribeTokenRefresh = (cb: (token: string) => void) => {
+  refreshSubscribers.push(cb);
+};
+
+const onRefreshed = (token: string) => {
+  refreshSubscribers.forEach((cb) => cb(token));
+  refreshSubscribers = [];
+};
+
+const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const urlStr = input.toString();
+  const options = init || {};
+  options.credentials = "include";
+
+  const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
+  if (token) {
+    const headers = (options.headers || {}) as Record<string, string>;
+    headers["Authorization"] = `Bearer ${token}`;
+    options.headers = headers;
+  }
+
+  let res = await originalFetch(input, options);
+
+  if (res.status === 401 && !urlStr.includes("/auth/refresh")) {
+    if (!isRefreshing) {
+      isRefreshing = true;
+      try {
+        const refreshRes = await originalFetch(`${API_URL}/auth/refresh`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (refreshRes.ok) {
+          const data = await refreshRes.json();
+          if (data.status === "success" && data.accessToken) {
+            localStorage.setItem("accessToken", data.accessToken);
+            onRefreshed(data.accessToken);
+            isRefreshing = false;
+            
+            const headers = (options.headers || {}) as Record<string, string>;
+            headers["Authorization"] = `Bearer ${data.accessToken}`;
+            options.headers = headers;
+            return originalFetch(input, options);
+          }
+        }
+        
+        isRefreshing = false;
+        localStorage.removeItem("accessToken");
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("auth-logout"));
+        }
+      } catch (err) {
+        isRefreshing = false;
+        localStorage.removeItem("accessToken");
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("auth-logout"));
+        }
+      }
+    } else {
+      return new Promise<Response>((resolve) => {
+        subscribeTokenRefresh((newToken) => {
+          const headers = (options.headers || {}) as Record<string, string>;
+          headers["Authorization"] = `Bearer ${newToken}`;
+          options.headers = headers;
+          resolve(originalFetch(input, options));
+        });
+      });
+    }
+  }
+
+  return res;
+};
+
+const fetch = customFetch;
+
 // -------------------------------------------------------------
 // AUTH & SESSIONS
 // -------------------------------------------------------------

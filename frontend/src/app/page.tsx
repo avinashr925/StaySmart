@@ -147,7 +147,14 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchListings();
-    fetchWishlist();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchWishlist();
+    } else {
+      setWishlistedIds([]);
+    }
   }, [user]);
 
   const handleCategorySelect = (catId: string, query?: Record<string, any>) => {
@@ -199,11 +206,12 @@ export default function HomePage() {
     }
   };
 
-  const toggleRole = () => {
+  const toggleRole = async () => {
     if (!user) return;
     const nextRole = user.role === "Host" ? "Guest" : "Host";
-    updateUserRole(nextRole);
+    await updateUserRole(nextRole);
     toast.success(`Switched to ${nextRole} perspective!`);
+    router.refresh();
   };
 
   const filteredFaqs = FAQS.filter(

@@ -103,9 +103,11 @@ interface IReservation {
   paymentMethod?: string;
   upiTxnId?: string;
   listing: {
+    _id: string;
     title: string;
   } | null;
   user: {
+    _id: string;
     name: string;
     email: string;
     avatar: string;
@@ -887,6 +889,19 @@ export default function HostDashboard() {
     }
   };
 
+  const runNominatimSearch = async (queryString: string) => {
+    const query = encodeURIComponent(queryString);
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`,
+      {
+        headers: {
+          "User-Agent": "StaySmart-Vacation-Rentals",
+        },
+      }
+    );
+    return response.json();
+  };
+
   const handleGeocode = async () => {
     if (!address.trim() && !city.trim()) {
       toast.error("Please fill in Street Address and City first.");
@@ -895,16 +910,32 @@ export default function HostDashboard() {
 
     setGeocoding(true);
     try {
-      const query = encodeURIComponent(`${address}, ${city}, ${country}`);
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`,
-        {
-          headers: {
-            "User-Agent": "StaySmart-Vacation-Rentals",
-          },
+      const fullQuery = `${address}, ${city}, ${country}`;
+      let data = await runNominatimSearch(fullQuery);
+
+      if ((!data || data.length === 0) && address.includes(",")) {
+        const parts = address.split(",");
+        if (parts.length > 1) {
+          const simplifiedAddress = parts.slice(1).join(",").trim();
+          if (simplifiedAddress) {
+            data = await runNominatimSearch(`${simplifiedAddress}, ${city}, ${country}`);
+          }
         }
-      );
-      const data = await response.json();
+      }
+
+      if (!data || data.length === 0) {
+        const cleanedAddress = address
+          .replace(/^(?:apt|apartment|flat|room|house|no|villa|pg|plot)\s*\d+[\s\w]*?,/i, "")
+          .trim();
+        if (cleanedAddress && cleanedAddress !== address) {
+          data = await runNominatimSearch(`${cleanedAddress}, ${city}, ${country}`);
+        }
+      }
+
+      if (!data || data.length === 0) {
+        data = await runNominatimSearch(`${city}, ${country}`);
+      }
+
       if (data && data.length > 0) {
         const { lat, lon } = data[0];
         setLatitude(parseFloat(lat).toFixed(6));
@@ -1317,9 +1348,34 @@ export default function HostDashboard() {
                         latitude={parseFloat(latitude) || 15.5414}
                         longitude={parseFloat(longitude) || 73.7486}
                         draggable={true}
-                        onPositionChange={(lat, lng) => {
+                        onPositionChange={async (lat, lng) => {
                           setLatitude(lat.toFixed(6));
                           setLongitude(lng.toFixed(6));
+                          try {
+                            const response = await fetch(
+                              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+                              {
+                                headers: {
+                                  "User-Agent": "StaySmart-Vacation-Rentals",
+                                },
+                              }
+                            );
+                            const data = await response.json();
+                            if (data && data.address) {
+                              const road = data.address.road || data.address.suburb || data.address.neighbourhood || data.address.amenity || "";
+                              const resolvedCity = data.address.city || data.address.town || data.address.village || data.address.county || "";
+                              const resolvedCountry = data.address.country || "";
+                              
+                              if (road) setAddress(road);
+                              if (resolvedCity) setCity(resolvedCity);
+                              if (resolvedCountry) setCountry(resolvedCountry);
+                            } else {
+                              toast.error("Could not resolve coordinates to an address. Please type address manually.");
+                            }
+                          } catch (err) {
+                            console.error("Reverse geocoding failed:", err);
+                            toast.error("Failed to decode address from map pin. Please type address manually.");
+                          }
                         }}
                       />
                     </div>
@@ -2439,6 +2495,71 @@ export default function HostDashboard() {
                                 <X className="w-4 h-4" />
                                 <span>Reject Payment</span>
                               </button>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {reservations.filter((r) => r.status === "Confirmed" && new Date(r.endDate) >= new Date()).length > 0 && (
+                  <div className="space-y-4 my-6">
+                    <h2 className="font-outfit text-xl font-bold text-indigo-600 dark:text-indigo-500">
+                      Upcoming Guest Reservations
+                    </h2>
+                    <p className="text-xs text-zinc-500">
+                      Confirmed upcoming stays booked by guests for your properties.
+                    </p>
+                    <div className="space-y-3">
+                      {reservations
+                        .filter((r) => r.status === "Confirmed" && new Date(r.endDate) >= new Date())
+                        .map((resv) => (
+                          <div
+                            key={resv._id}
+                            className="border border-zinc-200 dark:border-zinc-800 p-5 rounded-3xl bg-white dark:bg-zinc-900 space-y-3 shadow-xs"
+                          >
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-50 font-outfit">
+                                  {resv.listing?.title || "Property Listing"}
+                                </h4>
+                                <p className="text-xs text-zinc-500 mt-1">
+                                  Guest: <span className="font-semibold">{resv.user?.name || "Guest User"}</span> ({resv.user?.email})
+                                </p>
+                              </div>
+                              <span className="text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 px-2.5 py-1 rounded-full font-bold">
+                                Confirmed
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 text-xs bg-zinc-50 dark:bg-zinc-950 p-3 rounded-2xl border border-zinc-100 dark:border-zinc-800/40">
+                              <div>
+                                <span className="text-zinc-500">Stay Dates:</span>
+                                <p className="font-medium text-zinc-800 dark:text-zinc-200 mt-0.5">
+                                  {new Date(resv.startDate).toLocaleDateString()} - {new Date(resv.endDate).toLocaleDateString()}
+                                </p>
+                              </div>
+                              <div>
+                                <span className="text-zinc-500">Earnings:</span>
+                                <p className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                                  ₹{resv.totalPrice.toLocaleString()}
+                                </p>
+                              </div>
+                              <div className="col-span-2 border-t border-zinc-100 dark:border-zinc-800/50 pt-2 flex items-center justify-between">
+                                <div>
+                                  <span className="text-zinc-500">Payment Method:</span>
+                                  <p className="font-semibold text-zinc-700 dark:text-zinc-300 capitalize mt-0.5">
+                                    {resv.paymentMethod || "gateway"}
+                                  </p>
+                                </div>
+                                <button
+                                  onClick={() => window.location.href = `/messages?listingId=${resv.listing?._id}&otherUserId=${resv.user?._id}`}
+                                  className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer flex items-center gap-1 bg-transparent border-0"
+                                >
+                                  <MessageSquare className="w-3.5 h-3.5" />
+                                  <span>Chat with Guest</span>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         ))}

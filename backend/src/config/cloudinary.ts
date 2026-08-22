@@ -4,6 +4,8 @@ import { Readable } from "stream";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { logger } from "../utils/logger";
+import { AppError } from "../utils/AppError";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -61,8 +63,21 @@ class FallbackStorage implements multer.StorageEngine {
 
       this.cloudinaryStorage._handleFile(req, fileForCloudinary, (err: any, info: any) => {
         if (err) {
+          // Log safe, non-sensitive diagnostic details to the console/Render logs using properties already available on err
+          logger.error("[Cloudinary Diagnostics Log] Upload failed", {
+            errMessage: err.message,
+            errHttpCode: err.http_code,
+            errName: err.name,
+          });
+
           // eslint-disable-next-line no-console
           console.warn("[WARN] Cloudinary upload failed. Falling back to local disk storage:", err.message || err);
+
+          if (isProd) {
+            const errorMsg = `Cloudinary upload failed: ${err.message || "Unknown error"}`;
+            const errorInstance = new AppError(errorMsg, err.http_code || 500);
+            return cb(errorInstance);
+          }
 
           // Re-create stream for DiskStorage
           const fileForDisk = {
@@ -89,6 +104,7 @@ if (hasCloudinary) {
     cloud_name: cloudName,
     api_key: apiKey,
     api_secret: apiSecret,
+    secure: true,
   });
 
   const cloudinaryStorage = new CloudinaryStorage({

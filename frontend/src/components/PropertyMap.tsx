@@ -92,6 +92,12 @@ export default function PropertyMap({
         const latLng = marker.getLatLng();
         onPositionChange(latLng.lat, latLng.lng);
       });
+
+      map.on("click", (e: any) => {
+        const { lat, lng } = e.latlng;
+        marker.setLatLng([lat, lng]);
+        onPositionChange(lat, lng);
+      });
     }
 
     return () => {
